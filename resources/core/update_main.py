@@ -18,14 +18,27 @@ from thread import start_new_thread, allocate_lock
 	
 max_threads = int(NumberOfThreads) - 1	#0 - 1 thread, 1 - 2 threads ...
 num_threads = 0
-lock = allocate_lock()
 
-def thread_parse_IMDb_page(dType, tParam0, tParam1, tParam2, tParam3, tParam4, tParam5):
-	#movie:   MovieID,   IMDb,    Title, Rating, Votes, Top250
-	#tvshow:  TVShowID,  imdb_id, Title, Rating, Votes, tvdb_id
-	#episode: EpisodeID, IMDb,    Title, Rating, Votes, TVDB
+def thread_parse_IMDb_page(dType, tParam0, tParam1, tParam2, tParam3, tParam4, tParam5, lock, flock):
+        #movie:   MovieID,   IMDb, Title, Rating, Votes, Top250
+        #tvshow:  TVShowID,  IMDb, Title, Rating, Votes, TVDB
+        #episode: EpisodeID, IMDb, Title, Rating, Votes, TVDB
 	global num_threads
-	parsed_data = parse_IMDb_page(tParam1)
+        IMDb = tParam1
+        if IMDb == None or IMDb == "" or "tt" not in IMDb: IMDb = None
+        TVDB = tParam5
+        if dType == "movie": TVDB = None
+        defaultLog( addonLanguage(32507) % ( tParam2, IMDb, TVDB ) )
+        if IMDb == None:
+                if dType == "tvshow" or dType == "episode":
+                        IMDb = get_IMDb_ID(dType, TVDB, flock)
+                if IMDb == None:
+                        defaultLog( addonLanguage(32503) % ( tParam2 ) )
+                        lock.acquire()
+                        num_threads -= 1
+                        lock.release()
+                        return
+        parsed_data = parse_IMDb_page(IMDb, flock)
 	if parsed_data == None:
 		defaultLog( addonLanguage(32503) % ( tParam2 ) )
 	else:
@@ -48,9 +61,9 @@ def thread_parse_IMDb_page(dType, tParam0, tParam1, tParam2, tParam3, tParam4, t
 			if (dType == "movie"):
 				jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetMovieDetails","params":{"movieid":' + str( tParam0 ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","top250":' + str( updatedTop250 ) + '},"id":1}'
 			elif (dType == "tvshow"):
-				jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetTVShowDetails","params":{"tvshowid":' + str( tParam0 ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","uniqueid": {"imdb": "' + tParam1 + '","tvdb": "' + tParam5 + '"}},"id":1}'
+                                jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetTVShowDetails","params":{"tvshowid":' + str( tParam0 ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","uniqueid": {"imdb": "' + IMDb + '","tvdb": "' + TVDB + '"}},"id":1}'
 			elif (dType == "episode"):
-				jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetEpisodeDetails","params":{"episodeid":' + str( tParam0 ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","uniqueid": {"imdb": "' + tParam1 + '","tvdb": "' + tParam5 + '"}},"id":1}'
+                                jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetEpisodeDetails","params":{"episodeid":' + str( tParam0 ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","uniqueid": {"imdb": "' + IMDb + '","tvdb": "' + TVDB + '"}},"id":1}'
 			debugLog( "JSON Query: " + jSonQuery )
 			jSonResponse = xbmc.executeJSONRPC( jSonQuery )
 			jSonResponse = unicode( jSonResponse, 'utf-8', errors='ignore' )
@@ -61,15 +74,19 @@ def thread_parse_IMDb_page(dType, tParam0, tParam1, tParam2, tParam3, tParam4, t
 	lock.acquire()
 	num_threads -= 1
 	lock.release()
+	return
 
 class Movies:
 	def __init__( self ):
 		defaultLog( addonLanguage(32255) )
+		statusLog( addonLanguage(32255) )
 		if ShowNotifications == "true":
 			doNotify( addonLanguage(32255), 5000 )
 			xbmc.sleep(5000)
 		self.AllMovies = []
 		self.getDBMovies()
+                self.lock = allocate_lock()
+                self.flock = allocate_lock()
 		self.doUpdate()
 		defaultLog( addonLanguage(32258) )
 		if ShowNotifications == "true":
@@ -103,30 +120,29 @@ class Movies:
 			if ShowProgress == "true":
 				Counter = Counter + 1
 				Progress.update( (Counter*100)/AllMovies, addonLanguage(32261), Movie[2] )
-			IMDb = Movie[1]
-			TVDB = None
-			defaultLog( addonLanguage(32507) % ( Movie[2], IMDb, TVDB ) )
 			if int(Movie[6]) > 0 and ExcludeWatched == "true":
 				defaultLog( addonLanguage(32504) % ( Movie[2] ) )
 				continue
-			if IMDb == "" or IMDb == None or "tt" not in IMDb:
-				defaultLog( addonLanguage(32503) % ( Movie[2] ) )
-				continue
-			start_new_thread(thread_parse_IMDb_page,("movie",Movie[0],Movie[1],Movie[2],Movie[3],Movie[4],Movie[5]))
-			lock.acquire()
+                        start_new_thread(thread_parse_IMDb_page,("movie",Movie[0],Movie[1],Movie[2],Movie[3],Movie[4],Movie[5],self.lock,self.flock))
+                        self.lock.acquire()
 			num_threads += 1
-			lock.release()
+                        self.lock.release()
+                while num_threads > 0:
+                        xbmc.sleep(500)
 		if ShowProgress == "true":
 			Progress.close()
 
 class TVShows:
 	def __init__( self ):
 		defaultLog( addonLanguage(32256) )
+                statusLog( addonLanguage(32256) )
 		if ShowNotifications == "true":
 			doNotify( addonLanguage(32256), 5000 )
 			xbmc.sleep(5000)
 		self.AllTVShows = []
 		self.getDBTVShows()
+                self.lock = allocate_lock()
+                self.flock = allocate_lock()
 		self.doUpdateTVShows()
 		defaultLog( addonLanguage(32259) )
 		if ShowNotifications == "true":
@@ -171,19 +187,13 @@ class TVShows:
 					TVDB = unique_id.get('tvdb')
 					if TVDB == "" or TVDB == None:
 						TVDB = unique_id.get('unknown')
-					defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
 					if int(Watched) > 0 and ExcludeWatched == "true":
 						defaultLog( addonLanguage(32504) % ( Title ) )
 						continue
-					if IMDb == "" or IMDb == None or "tt" not in IMDb:
-						IMDb = get_IMDb_ID("episode", TVDB)
-					if IMDb == "" or IMDb == None:
-						defaultLog( addonLanguage(32503) % ( Title ) )
-						continue
-					start_new_thread(thread_parse_IMDb_page,("episode",EpisodeID,IMDb,Title,Rating,Votes,TVDB))
-					lock.acquire()
+                                        start_new_thread(thread_parse_IMDb_page,("episode",EpisodeID,IMDb,Title,Rating,Votes,TVDB,self.lock,self.flock))
+                                        self.lock.acquire()
 					num_threads += 1
-					lock.release()
+					self.lock.release()
 		except: pass
 
 	def doUpdateTVShows( self ):
@@ -196,26 +206,20 @@ class TVShows:
 				xbmc.sleep(500)
 			if ShowProgress == "true":
 				self.Progress.update( 0, addonLanguage(32262), TVShow[2] )
-			IMDb = TVShow[1]
-			TVDB = TVShow[5]
-			defaultLog( addonLanguage(32507) % ( TVShow[2], IMDb, TVDB ) )
 			if int(TVShow[6]) > 0 and ExcludeWatched == "true":
 				defaultLog( addonLanguage(32504) % ( TVShow[2] ) )
 				continue
-			if IMDb == "" or IMDb == None or "tt" not in IMDb:
-				IMDb = get_IMDb_ID("tvshow", TVDB)
-			if IMDb == "" or IMDb == None:
-				defaultLog( addonLanguage(32503) % ( TVShow[2] ) )
-				continue		   
-			start_new_thread(thread_parse_IMDb_page,("tvshow",TVShow[0],IMDb,TVShow[2],TVShow[3],TVShow[4],TVShow[5]))
-			lock.acquire()
+                        start_new_thread(thread_parse_IMDb_page,("tvshow",TVShow[0],TVShow[1],TVShow[2],TVShow[3],TVShow[4],TVShow[5],self.lock,self.flock))
+                        self.lock.acquire()
 			num_threads += 1
-			lock.release()
+			self.lock.release()
 			if IncludeEpisodes == "true":
 				self.doUpdateEpisodes( TVShow[0], TVShow[2] )
 			else:
 				self.Progress.update( 100, addonLanguage(32262), TVShow[2] )
 				xbmc.sleep(1000)
+                while num_threads > 0:
+                        xbmc.sleep(500)
 		if ShowProgress == "true":
 			self.Progress.close()
 
@@ -224,6 +228,7 @@ def perform_update():
 		xbmcgui.Dialog().ok( "%s" % ( addonName ), addonLanguage(32251) )
 		return
 	addonSettings.setSetting( "PerformingUpdate", "true" )
+        beginStatusLog()
 	if onMovies == "true": Movies()
 	if ShowNotifications == "true":
 		xbmc.sleep(5000)
