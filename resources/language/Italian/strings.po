@@ -84,6 +84,10 @@ msgctxt "#32503"
 msgid ""%s": Update finished (impossible to update)"
 msgstr ""%s": Aggiornamento terminato (impossibile aggiornare)"
 
+msgctxt "#32504"
+msgid ""%s": Update finished (skipped because watched)"
+msgstr ""%s": Aggiornamento terminato (saltato perchè visto)"
+
 msgctxt "#32505"
 msgid "Error accessing IMDb site (%s)"
 msgstr "Errore di accesso al sito IMDb (%s)"
@@ -104,10 +108,6 @@ msgctxt "#32509"
 msgid "Obtaining IMDb ID from TheTVDB site..."
 msgstr "Ottenimento IMDb ID dal sito TheTVDB..."
 
-msgctxt "#32510"
-msgid "Obtain IMDb ID from TheTVDB site is disabled"
-msgstr "Ottieni IMDb ID dal sito TheTVDB è disabilitato"
-
 msgctxt "#32511"
 msgid "Check TVDB ID"
 msgstr "Verificare TVDB ID"
@@ -123,6 +123,18 @@ msgstr "Prossimo aggiornamento programmato per il %s alle ore %s"
 msgctxt "#32801"
 msgid "General"
 msgstr "Generale"
+
+msgctxt "#32802"
+msgid "Additional options"
+msgstr "Opzioni aggiuntive"
+
+msgctxt "#32803"
+msgid "Exclude watched"
+msgstr "Escludi visti"
+
+msgctxt "#32804"
+msgid "Number of threads"
+msgstr "Numero di thread"
 
 msgctxt "#32805"
 msgid "Update Top 250"
@@ -175,14 +187,6 @@ msgstr "Mostra avanzamento aggiornamento"
 msgctxt "#32818"
 msgid "Include Episodes"
 msgstr "Includi Episodi"
-
-msgctxt "#32819"
-msgid "Obtain IMDb ID from TheTVDB.com"
-msgstr "Ottieni IMDb ID da TheTVDB.com"
-
-msgctxt "#32820"
-msgid "API Key"
-msgstr "Chiave API"
 
 msgctxt "#32821"
 msgid "Scheduling"
