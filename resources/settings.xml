@@ -10,7 +10,7 @@
 	  <setting label="32808" type="bool" id="IncludeTVShowsVotes" enable="eq(-1,true)" default="false" />
 	  <setting label="32818" type="bool" id="IncludeEpisodes" enable="eq(-2,true)" default="false" />
 	  <setting label="32802" type="lsep" />
-	  <setting label="32803" type="bool" id="ExcludeWatched" default="false" />
+	  <setting label="32803" type="bool" id="ExcludeWatched" default="true" />
 	  <setting label="32804" type="slider" id="NumberOfThreads" default="8" range="4,4,16" option="int" />
 	 </category>
      <category label="32821" id="Scheduling">
