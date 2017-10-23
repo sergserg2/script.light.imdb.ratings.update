@@ -2,6 +2,7 @@ v3.2.0 (2017-10-23)
 - Removed the need of a personal API key for TheTVDB.com
 - Added option to exclude watched Movies/TV Shows/Episodes from the update
 - Added option to set the number of threads
+- Added status file writing to user profile folder
 
 v3.1.0 (2017-10-21) (by dziobak)
 - Added multiple-threads for IMDb requests
