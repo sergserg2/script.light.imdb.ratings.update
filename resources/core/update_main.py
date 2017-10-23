@@ -16,7 +16,7 @@ from imdb_scraper import parse_IMDb_page
 from tvdb_scraper import get_IMDb_ID
 from thread import start_new_thread, allocate_lock
 	
-max_threads = 3	#0 - 1 thread, 1 - 2 threads ...
+max_threads = int(NumberOfThreads) - 1	#0 - 1 thread, 1 - 2 threads ...
 num_threads = 0
 lock = allocate_lock()
 
@@ -77,7 +77,7 @@ class Movies:
 			xbmc.sleep(5000)
 
 	def getDBMovies( self ):
-		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetMovies","params":{"properties":["imdbnumber","rating","votes","top250"]},"id":1}'
+		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetMovies","params":{"properties":["imdbnumber","rating","votes","top250","playcount"]},"id":1}'
 		debugLog( "JSON Query: " + jSonQuery )
 		jSonResponse = xbmc.executeJSONRPC( jSonQuery )
 		jSonResponse = unicode( jSonResponse, 'utf-8', errors='ignore' )
@@ -87,8 +87,8 @@ class Movies:
 			if jSonResponse['result'].has_key( 'movies' ):
 				for item in jSonResponse['result']['movies']:
 					MovieID = item.get('movieid'); IMDb = item.get('imdbnumber'); Title  = item.get('label'); 
-					Rating = item.get('rating'); Votes = item.get('votes'); Top250 = item.get('top250');
-					self.AllMovies.append( ( MovieID, IMDb, Title, Rating, Votes, Top250 ) )
+					Rating = item.get('rating'); Votes = item.get('votes'); Top250 = item.get('top250'); Watched = item.get('playcount');
+					self.AllMovies.append( ( MovieID, IMDb, Title, Rating, Votes, Top250, Watched ) )
 	  	except: pass
 
 	def doUpdate( self ):
@@ -106,6 +106,9 @@ class Movies:
 			IMDb = Movie[1]
 			TVDB = None
 			defaultLog( addonLanguage(32507) % ( Movie[2], IMDb, TVDB ) )
+			if int(Movie[6]) > 0 and ExcludeWatched == "true":
+				defaultLog( addonLanguage(32504) % ( Movie[2] ) )
+				continue
 			if IMDb == "" or IMDb == None or "tt" not in IMDb:
 				defaultLog( addonLanguage(32503) % ( Movie[2] ) )
 				continue
@@ -131,7 +134,7 @@ class TVShows:
 			xbmc.sleep(5000)
 
 	def getDBTVShows( self ):
-		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetTVShows","params":{"properties":["imdbnumber","uniqueid","rating","votes"]},"id":1}'
+		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetTVShows","params":{"properties":["imdbnumber","uniqueid","rating","votes","playcount"]},"id":1}'
 		debugLog( "JSON Query: " + jSonQuery )
 		jSonResponse = xbmc.executeJSONRPC( jSonQuery )
 		jSonResponse = unicode( jSonResponse, 'utf-8', errors='ignore' )
@@ -141,13 +144,13 @@ class TVShows:
 			if jSonResponse['result'].has_key( 'tvshows' ):
 				for item in jSonResponse['result']['tvshows']:
 					TVShowID = item.get('tvshowid'); unique_id = item.get('uniqueid'); imdb_id = unique_id.get('imdb'); Title  = item.get('label');
-					Rating = item.get('rating'); Votes = item.get('votes'); tvdb_id = item.get('imdbnumber')
-					self.AllTVShows.append( ( TVShowID, imdb_id, Title, Rating, Votes, tvdb_id ) )
+					Rating = item.get('rating'); Votes = item.get('votes'); tvdb_id = item.get('imdbnumber'); Watched = item.get('playcount');
+					self.AllTVShows.append( ( TVShowID, imdb_id, Title, Rating, Votes, tvdb_id, Watched ) )
 		except: pass
 	  
 	def doUpdateEpisodes( self, tvshowid, tvshowtitle ):
 		global num_threads
-		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetEpisodes","params":{"tvshowid":' + str( tvshowid ) + ', "properties":["uniqueid","rating","votes"]},"id":1}'
+		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetEpisodes","params":{"tvshowid":' + str( tvshowid ) + ', "properties":["uniqueid","rating","votes","playcount"]},"id":1}'
 		debugLog( "JSON Query: " + jSonQuery )
 		jSonResponse = xbmc.executeJSONRPC( jSonQuery )
 		jSonResponse = unicode( jSonResponse, 'utf-8', errors='ignore' )
@@ -164,11 +167,14 @@ class TVShows:
 						Counter = Counter + 1
 						self.Progress.update( (Counter*100)/AllEpisodes, addonLanguage(32262), tvshowtitle )
 					EpisodeID = item.get('episodeid'); unique_id = item.get('uniqueid'); IMDb = unique_id.get('imdb'); Title  = item.get('label');
-					Rating = item.get('rating'); Votes = item.get('votes');
+					Rating = item.get('rating'); Votes = item.get('votes'); Watched = item.get('playcount');
 					TVDB = unique_id.get('tvdb')
 					if TVDB == "" or TVDB == None:
 						TVDB = unique_id.get('unknown')
 					defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
+					if int(Watched) > 0 and ExcludeWatched == "true":
+						defaultLog( addonLanguage(32504) % ( Title ) )
+						continue
 					if IMDb == "" or IMDb == None or "tt" not in IMDb:
 						IMDb = get_IMDb_ID("episode", TVDB)
 					if IMDb == "" or IMDb == None:
@@ -193,6 +199,9 @@ class TVShows:
 			IMDb = TVShow[1]
 			TVDB = TVShow[5]
 			defaultLog( addonLanguage(32507) % ( TVShow[2], IMDb, TVDB ) )
+			if int(TVShow[6]) > 0 and ExcludeWatched == "true":
+				defaultLog( addonLanguage(32504) % ( TVShow[2] ) )
+				continue
 			if IMDb == "" or IMDb == None or "tt" not in IMDb:
 				IMDb = get_IMDb_ID("tvshow", TVDB)
 			if IMDb == "" or IMDb == None:
