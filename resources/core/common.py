@@ -22,8 +22,8 @@ IncludeMoviesVotes   = addonSettings.getSetting( "IncludeMoviesVotes" )
 IncludeMoviesTop250  = addonSettings.getSetting( "IncludeMoviesTop250" )
 IncludeTVShowsVotes  = addonSettings.getSetting( "IncludeTVShowsVotes" )
 IncludeEpisodes      = addonSettings.getSetting( "IncludeEpisodes" )
-ObtainIMDbID         = addonSettings.getSetting( "ObtainIMDbID" )
-TheTVDBAPI           = addonSettings.getSetting( "TheTVDBAPI" )
+ExcludeWatched       = addonSettings.getSetting( "ExcludeWatched" )
+NumberOfThreads      = addonSettings.getSetting( "NumberOfThreads" )
 
 def doUnicode( textMessage ):
     try: textMessage = unicode( textMessage, 'utf-8' )
