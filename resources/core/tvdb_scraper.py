@@ -9,13 +9,10 @@
 
 from common import *
 import resources.support.tvdbsimple as tvdb
-tvdb.KEYS.API_KEY = TheTVDBAPI.upper()
+tvdb.KEYS.API_KEY = "53F49B260156B636"
 
 def get_IMDb_ID(updateitem, tvdb_id):
 	imdb_id = None
-	if ObtainIMDbID == "false":
-		defaultLog( addonLanguage(32510) )
-		return imdb_id
 	defaultLog( addonLanguage(32509) )
 	if tvdb_id == "" or tvdb_id == None:
 		return imdb_id
