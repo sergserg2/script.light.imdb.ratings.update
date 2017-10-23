@@ -1,0 +1,225 @@
+# KODI Media Center Language File
+# Addon Name: Light IMDb Ratings Update
+# Addon ID: script.light.imdb.ratings.update
+# Addon Provider: axlt2002
+msgid ""
+msgstr ""
+"Project-Id-Version: Light IMDb Ratings Update\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-26 00:00+0000\n"
+"PO-Revision-Date: 2017-05-26 00:00+0000\n"
+"Last-Translator: axlt2002 \n"
+"Language-Team: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Light IMDb Ratings Update is a Kodi add-on that keeps updated the IMDb ratings for your Movies and TV Shows."
+msgstr "Light IMDb Ratings Update è un add-on di Kodi che mantiene aggiornate le valutazioni IMDb dei tuoi Film e Serie TV."
+
+msgctxt "Addon Description"
+msgid "Light IMDb Ratings Update runs as a Kodi service to update the ratings, votes and IMDb Top 250 for Movies as well as the ratings and votes for TV Shows (including Episodes) by scraping the data from the IMDb site. The update can be run manually or scheduled once a week and it will run as soon as possible after a scheduled start is missed. Light IMDb Ratings Update requires the presence of the IMDb IDs for the Movies, TV Shows and Episodes you want to be updated. Light IMDb Ratings Update is compatible with Kodi 17/18 and runs on every platform. Please check the add-on thread in the Kodi forum for more details."
+msgstr "Light IMDb Ratings Update viene eseguito come un servizio di Kodi per aggiornare le valutazioni, i voti e la Top 250 IMDb per i Film così come le valutazioni ed i voti per le Serie TV (inclusi gli Episodi) ottenendo i dati dal sito IMDb. L'aggiornamento può essere eseguito manualmente o pianificato una volta alla settimana e sarà avviato appena possibile se un avvio pianificato non viene eseguito. Light IMDb Ratings Update richiede la presenza degli IMDb ID per i Film, le Serie TV e gli Episodi che si vogliono aggiornare. Light IMDb Ratings Update è compatibile con Kodi 17/18 e gira su ogni piattaforma. Per ulteriori dettagli si veda il thread dell'add-on nel forum di Kodi."
+
+msgctxt "#32200"
+msgid "Service successfully started"
+msgstr "Servizio avviato con successo"
+
+msgctxt "#32251"
+msgid "The ratings update is already running, please wait..."
+msgstr "L'aggiornamento delle valutazioni è già in corso, attendere prego..."
+
+msgctxt "#32252"
+msgid "Update rating"
+msgstr "Aggiorna valutazione"
+
+msgctxt "#32253"
+msgid "Would you like to update the ratings also for all the Episodes?"
+msgstr "Desideri aggiornare le valutazioni anche per tutti gli Episodi?"
+
+msgctxt "#32255"
+msgid "Ratings update for Movies started"
+msgstr "Aggiornamento delle valutazioni dei Film avviato"
+
+msgctxt "#32256"
+msgid "Ratings update for TV Shows started"
+msgstr "Aggiornamento delle valutazioni delle Serie TV avviato"
+
+msgctxt "#32258"
+msgid "Ratings update for Movies finished"
+msgstr "Aggiornamento delle valutazioni dei Film terminato"
+
+msgctxt "#32259"
+msgid "Ratings update for TV Shows finished"
+msgstr "Aggiornamento delle valutazioni delle Serie TV terminato"
+
+msgctxt "#32260"
+msgid "Updating rating"
+msgstr "Aggiornamento valutazione"
+
+msgctxt "#32261"
+msgid "Updating ratings for Movies"
+msgstr "Aggiornamento delle valutazioni dei Film"
+
+msgctxt "#32262"
+msgid "Updating ratings for TV Shows"
+msgstr "Aggiornamento delle valutazioni delle Serie TV"
+
+msgctxt "#32499"
+msgid "Current data: rating: %s, votes: %s, top250: %s"
+msgstr "Dati attuali: rating: %s, votes: %s, top250: %s"
+
+msgctxt "#32500"
+msgid ""%s": Update finished (rating: %s, votes: %s, top250: %s)"
+msgstr ""%s": Aggiornamento terminato (rating: %s, votes: %s, top250: %s)"
+
+msgctxt "#32502"
+msgid ""%s": Update finished (no update)"
+msgstr ""%s": Aggiornamento terminato (nessun aggiornamento)"
+
+msgctxt "#32503"
+msgid ""%s": Update finished (impossible to update)"
+msgstr ""%s": Aggiornamento terminato (impossibile aggiornare)"
+
+msgctxt "#32505"
+msgid "Error accessing IMDb site (%s)"
+msgstr "Errore di accesso al sito IMDb (%s)"
+
+msgctxt "#32506"
+msgid "Scraped data: rating: %s, votes: %s, top250: %s"
+msgstr "Dati ottenuti: rating: %s, votes: %s, top250: %s"
+
+msgctxt "#32507"
+msgid ""%s": Update started (IMDb ID: %s, TVDB ID: %s)"
+msgstr ""%s": Aggiornamento iniziato (IMDb ID: %s, TVDB ID: %s)"
+
+msgctxt "#32508"
+msgid "Would you like to update the ratings for all the Episodes of %s?"
+msgstr "Desideri aggiornare le valutazioni di tutti gli Episodi della %s?"
+
+msgctxt "#32509"
+msgid "Obtaining IMDb ID from TheTVDB site..."
+msgstr "Ottenimento IMDb ID dal sito TheTVDB..."
+
+msgctxt "#32510"
+msgid "Obtain IMDb ID from TheTVDB site is disabled"
+msgstr "Ottieni IMDb ID dal sito TheTVDB è disabilitato"
+
+msgctxt "#32511"
+msgid "Check TVDB ID"
+msgstr "Verificare TVDB ID"
+
+msgctxt "#32512"
+msgid "IMDb ID: %s"
+msgstr "IMDb ID: %s"
+
+msgctxt "#32655"
+msgid "Next update is scheduled the %s at %s"
+msgstr "Prossimo aggiornamento programmato per il %s alle ore %s"
+
+msgctxt "#32801"
+msgid "General"
+msgstr "Generale"
+
+msgctxt "#32805"
+msgid "Update Top 250"
+msgstr "Aggiorna la Top 250"
+
+msgctxt "#32806"
+msgid "Movies"
+msgstr "Film"
+
+msgctxt "#32807"
+msgid "Update ratings"
+msgstr "Aggiorna valutazioni"
+
+msgctxt "#32808"
+msgid "Include votes"
+msgstr "Includi voti"
+
+msgctxt "#32809"
+msgid "TV Shows"
+msgstr "Serie TV"
+
+msgctxt "#32810"
+msgid "Update ratings"
+msgstr "Aggiorna valutazioni"
+
+msgctxt "#32812"
+msgid "Scheduling options"
+msgstr "Opzioni pianificazione"
+
+msgctxt "#32813"
+msgid "Day"
+msgstr "Giorno"
+
+msgctxt "#32814"
+msgid "Time"
+msgstr "Ora"
+
+msgctxt "#32815"
+msgid "Background"
+msgstr "Background"
+
+msgctxt "#32816"
+msgid "Show notifications"
+msgstr "Mostra notifiche"
+
+msgctxt "#32817"
+msgid "Show update progress"
+msgstr "Mostra avanzamento aggiornamento"
+
+msgctxt "#32818"
+msgid "Include Episodes"
+msgstr "Includi Episodi"
+
+msgctxt "#32819"
+msgid "Obtain IMDb ID from TheTVDB.com"
+msgstr "Ottieni IMDb ID da TheTVDB.com"
+
+msgctxt "#32820"
+msgid "API Key"
+msgstr "Chiave API"
+
+msgctxt "#32821"
+msgid "Scheduling"
+msgstr "Pianificazione"
+
+msgctxt "#32822"
+msgid "Enable"
+msgstr "Abilita"
+
+msgctxt "#32823"
+msgid "Background options"
+msgstr "Opzioni background"
+
+msgctxt "#32828"
+msgid "Monday"
+msgstr "Lunedì"
+
+msgctxt "#32829"
+msgid "Tuesday"
+msgstr "Martedì"
+
+msgctxt "#32830"
+msgid "Wednesday"
+msgstr "Mercoledì"
+
+msgctxt "#32831"
+msgid "Thursday"
+msgstr "Giovedì"
+
+msgctxt "#32832"
+msgid "Friday"
+msgstr "Venerdì"
+
+msgctxt "#32833"
+msgid "Saturday"
+msgstr "Sabato"
+
+msgctxt "#32834"
+msgid "Sunday"
+msgstr "Domenica"

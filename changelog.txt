@@ -1,0 +1,47 @@
+v3.1.0 (2017-10-21) (by dziobak)
+- Added multiple-threads for IMDb requests
+- Changed HTML processing to regexp (removed BeautifulSoup)
+- Changed IMDb site to akas
+- Added gzip support to IMDb requests
+- Fixed crash when socket timeout
+- Fixed error when IMDb has no rating
+- Fixed error when TheTVDB.com has no IMDb ID for TV Show/Episode
+- Fixed error when TheTVDB.com returns IMDb ID without "tt"
+- Changed behaviour on IMDb connection error
+- Fixed other minor bugs
+
+v3.0.0 (2017-10-18)
+- New IMDb scraper based on python (removed PHP)
+- Added manual update from the Home menu (under Add-on sub-menu)
+- Added update of single Movie/TV Show/Season/Episode through context menu
+- Added TV Shows/Episodes IMDb ID retrieval from TheTVDB.com (need API key)
+- Added check to avoid multiple concurrent updates
+- Fixed IMDb ID check for Episodes
+- Revised all logging messages
+
+v2.1.1 (2017-08-27)
+- Fixed standalone TV Show update
+
+v2.1.0 (2017-08-19)
+- Added support for Nvidia Shield
+- Fixed bug in python
+
+v2.0.0 (2017-07-30):
+- Added support for Ubuntu, Debian, LibreELEC and Android
+- Added automatic PHP installation
+- Revised Top 250 update for Movies
+- Revised scheduled update information save
+- Added option to disable scheduled update
+- Fixed deprecated constructor in PHP 7.0.x
+
+v1.1.1 (2017-06-21):
+- Bug fix
+
+v1.1.0 (2017-06-21):
+- Added manual update
+
+v1.0.1 (2017-06-20):
+- Improved configuration
+
+v1.0.0 (2017-05-26):
+- First add-on release
