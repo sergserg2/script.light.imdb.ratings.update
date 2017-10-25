@@ -2,15 +2,15 @@
 <settings>
 	 <category label="32801" id="General">
 	  <setting label="32806" type="lsep" />
-	  <setting label="32807" type="bool" id="Movies" default="false" />
-	  <setting label="32808" type="bool" id="IncludeMoviesVotes" enable="eq(-1,true)" default="false" />
-	  <setting label="32805" type="bool" id="IncludeMoviesTop250" enable="eq(-2,true)" default="false" />
+	  <setting label="32807" type="bool" id="Movies" default="true" />
+	  <setting label="32808" type="bool" id="IncludeMoviesVotes" enable="eq(-1,true)" default="true" />
+	  <setting label="32805" type="bool" id="IncludeMoviesTop250" enable="eq(-2,true)" default="true" />
 	  <setting label="32809" type="lsep" />
-	  <setting label="32810" type="bool" id="TVShows" default="false" />
-	  <setting label="32808" type="bool" id="IncludeTVShowsVotes" enable="eq(-1,true)" default="false" />
-	  <setting label="32818" type="bool" id="IncludeEpisodes" enable="eq(-2,true)" default="false" />
+	  <setting label="32810" type="bool" id="TVShows" default="true" />
+	  <setting label="32808" type="bool" id="IncludeTVShowsVotes" enable="eq(-1,true)" default="true" />
+	  <setting label="32818" type="bool" id="IncludeEpisodes" enable="eq(-2,true)" default="true" />
 	  <setting label="32802" type="lsep" />
-	  <setting label="32803" type="bool" id="ExcludeWatched" default="false" />
+	  <setting label="32803" type="bool" id="ExcludeWatched" default="true" />
 	  <setting label="32804" type="slider" id="NumberOfThreads" default="8" range="4,4,16" option="int" />
 	 </category>
      <category label="32821" id="Scheduling">

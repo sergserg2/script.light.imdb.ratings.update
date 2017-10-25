@@ -85,7 +85,7 @@ msgid ""%s": Update finished (impossible to update)"
 msgstr ""
 
 msgctxt "#32504"
-msgid ""%s": Update finished (skipped because watched)"
+msgid ""%s": Update skipped (because watched)"
 msgstr ""
 
 msgctxt "#32505"
@@ -129,7 +129,7 @@ msgid "Additional options"
 msgstr ""
 
 msgctxt "#32803"
-msgid "Exlcude watched"
+msgid "Exclude watched"
 msgstr ""
 
 msgctxt "#32804"
