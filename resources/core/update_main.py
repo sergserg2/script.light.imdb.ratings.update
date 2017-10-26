@@ -164,9 +164,9 @@ class TVShows:
 					self.AllTVShows.append( ( TVShowID, imdb_id, Title, Rating, Votes, tvdb_id, Watched ) )
 		except: pass
 	  
-	def doUpdateEpisodes( self, tvshowid, tvshowtitle ):
+	def doUpdateEpisodes( self, tvshowid, tvshowtitle, PCounter ):
 		global num_threads
-		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetEpisodes","params":{"tvshowid":' + str( tvshowid ) + ', "properties":["uniqueid","rating","votes","playcount"]},"id":1}'
+		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.GetEpisodes","params":{"tvshowid":' + str( tvshowid ) + ', "properties":["uniqueid","rating","votes","playcount","episode","season"]},"id":1}'
 		debugLog( "JSON Query: " + jSonQuery )
 		jSonResponse = xbmc.executeJSONRPC( jSonQuery )
 		jSonResponse = unicode( jSonResponse, 'utf-8', errors='ignore' )
@@ -174,19 +174,17 @@ class TVShows:
 		jSonResponse = jSon.loads( jSonResponse )
 		try:
 			if jSonResponse['result'].has_key( 'episodes' ):
-				Counter = 0
-				AllEpisodes = jSonResponse['result']['limits']['total']
 				for item in jSonResponse['result']['episodes']:
 					while num_threads > max_threads:
 						xbmc.sleep(500)
-					if ShowProgress == "true":
-						Counter = Counter + 1
-						self.Progress.update( (Counter*100)/AllEpisodes, addonLanguage(32262), tvshowtitle )
-					EpisodeID = item.get('episodeid'); unique_id = item.get('uniqueid'); IMDb = unique_id.get('imdb'); Title  = item.get('label');
+					EpisodeID = item.get('episodeid'); unique_id = item.get('uniqueid'); IMDb = unique_id.get('imdb')
+					Title = tvshowtitle + " " + str( item.get('season') ) + "x" + str( "%02d" % item.get('episode') );
 					Rating = item.get('rating'); Votes = item.get('votes'); Watched = item.get('playcount');
 					TVDB = unique_id.get('tvdb')
 					if TVDB == "" or TVDB == None:
 						TVDB = unique_id.get('unknown')
+					if ShowProgress == "true":
+						self.Progress.update( PCounter, addonLanguage(32262), Title )
 					if int(Watched) > 0 and ExcludeWatched == "true":
 						defaultLog( addonLanguage(32504) % ( Title ) )
 						continue
@@ -198,6 +196,7 @@ class TVShows:
 
 	def doUpdateTVShows( self ):
 		global num_threads
+		AllTVShows = len( self.AllTVShows ); Counter = 0;
 		if ShowProgress == "true":
 			self.Progress = xbmcgui.DialogProgressBG()
 			self.Progress.create( addonLanguage(32262) )
@@ -205,7 +204,9 @@ class TVShows:
 			while num_threads > max_threads:
 				xbmc.sleep(500)
 			if ShowProgress == "true":
-				self.Progress.update( 0, addonLanguage(32262), TVShow[2] )
+                                Counter = Counter + 1
+                                PCounter = (Counter*100)/AllTVShows
+				self.Progress.update( PCounter, addonLanguage(32262), TVShow[2] )
 			if int(TVShow[6]) > 0 and ExcludeWatched == "true":
 				defaultLog( addonLanguage(32504) % ( TVShow[2] ) )
 				continue
@@ -214,10 +215,7 @@ class TVShows:
 			num_threads += 1
 			self.lock.release()
 			if IncludeEpisodes == "true":
-				self.doUpdateEpisodes( TVShow[0], TVShow[2] )
-			else:
-				self.Progress.update( 100, addonLanguage(32262), TVShow[2] )
-				xbmc.sleep(1000)
+				self.doUpdateEpisodes( TVShow[0], TVShow[2], PCounter )
                 while num_threads > 0:
                         xbmc.sleep(500)
 		if ShowProgress == "true":
@@ -234,4 +232,3 @@ def perform_update():
 		xbmc.sleep(5000)
 	if onTVShows == "true": TVShows()
 	addonSettings.setSetting( "PerformingUpdate", "false" )
-
