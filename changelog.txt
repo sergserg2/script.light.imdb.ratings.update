@@ -3,6 +3,7 @@ v3.2.0 (2017-10-23)
 - Added option to exclude watched Movies/TV Shows/Episodes from the update
 - Added option to set the number of threads
 - Added status file saved to user profile folder with problematic entries
+- Changed episode name to tvseries title with season and episode number
 
 v3.1.0 (2017-10-21) (by dziobak)
 - Added multiple-threads for IMDb requests
