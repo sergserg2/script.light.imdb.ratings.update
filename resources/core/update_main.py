@@ -231,9 +231,9 @@ def perform_update():
 		return
 	addonSettings.setSetting( "PerformingUpdate", "true" )
         beginStatusLog()
-	if onMovies == "true": Movies()
-	if ShowNotifications == "true":
-		xbmc.sleep(5000)
+	if onMovies == "true":
+		Movies()
+		if ShowNotifications == "true":	xbmc.sleep(5000)
 	if onTVShows == "true": TVShows()
 	addonSettings.setSetting( "PerformingUpdate", "false" )
 
