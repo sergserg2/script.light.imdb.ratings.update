@@ -129,7 +129,7 @@ msgid "Additional options"
 msgstr ""
 
 msgctxt "#32803"
-msgid "Exlcude watched"
+msgid "Exclude watched"
 msgstr ""
 
 msgctxt "#32804"
