@@ -1,8 +1,9 @@
-v3.2.0 (2017-10-23)
+v3.2.0 (2017-10-26)
 - Removed the need of a personal API key for TheTVDB.com
 - Added option to exclude watched Movies/TV Shows/Episodes from the update
 - Added option to set the number of threads
 - Added status file saved to user profile folder with problematic entries
+- Changed episode name to tvseries title with season and episode number
 
 v3.1.0 (2017-10-21) (by dziobak)
 - Added multiple-threads for IMDb requests

@@ -4,6 +4,8 @@
 # Light IMDb Ratings Update #
 # by axlt2002               #
 #############################
+# changes by dziobak        #
+#############################
 
 import xbmc, xbmcgui
 import sys, re
@@ -79,13 +81,13 @@ def update( filename, label ):
 	Title  = item.get('label')
 	defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
 	if (updateitem != "movie") and (IMDb == "" or IMDb == None or "tt" not in IMDb):
-		IMDb = get_IMDb_ID(updateitem, TVDB, None)
+		(IMDb, statusInfo) = get_IMDb_ID(updateitem, TVDB)
                 if IMDb == None:
                         defaultLog( addonLanguage(32503) % ( Title ) )
                         exit = True
 	else:	
-		parsed_data = parse_IMDb_page(IMDb, None)
-		if parsed_data == None:
+		(updatedRating, updatedVotes, updatedTop250, statusInfo) = parse_IMDb_page(IMDb)
+		if updatedRating == None:
 			defaultLog( addonLanguage(32503) % ( Title ) )
 			exit = True
 	if exit == True:
@@ -94,11 +96,7 @@ def update( filename, label ):
 		Progress.close()
 		addonSettings.setSetting( "PerformingUpdate", "false" )
 		return
-	updatedRating = parsed_data[0]
-	updatedVotes = parsed_data[1]
-	if updateitem == "movie":
-		updatedTop250 = parsed_data[2]
-	else:
+	if updateitem != "movie":
 		updatedTop250 = None
 	if updateitem == "movie":
 		jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetMovieDetails","params":{"movieid":' + str( ID ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","top250":' + str( updatedTop250 ) + '},"id":1}'
@@ -143,16 +141,14 @@ def doUpdateEpisodes( progress, tvshowid, season, tvshowtitle ):
 					TVDB = unique_id.get('unknown')
 				defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
 				if IMDb == "" or IMDb == None or "tt" not in IMDb:
-					IMDb = get_IMDb_ID("episode", TVDB, None)
+					(IMDb, statusInfo) = get_IMDb_ID("episode", TVDB)
                                         if IMDb == None:
                                                 defaultLog( addonLanguage(32503) % ( Title ) )
                                                 continue
-				parsed_data = parse_IMDb_page(IMDb, None)
-				if parsed_data == None:
+				(updatedRating, updatedVotes, updatedTop250, statusInfo) = parse_IMDb_page(IMDb)
+				if updatedRating == None:
 					defaultLog( addonLanguage(32503) % ( Title ) )
 					continue
-				updatedRating = parsed_data[0]
-				updatedVotes = parsed_data[1]
 				updatedTop250 = None
 				jSonQuery = '{"jsonrpc":"2.0","method":"VideoLibrary.SetEpisodeDetails","params":{"episodeid":' + str( EpisodeID ) + ',"rating":' + str( updatedRating ) + ',"votes":"' + str( updatedVotes ) + '","uniqueid": {"imdb": "' + IMDb + '","tvdb": "' + TVDB + '"}},"id":1}'
 				debugLog( "JSON Query: " + jSonQuery )
