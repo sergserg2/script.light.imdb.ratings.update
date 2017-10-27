@@ -16,7 +16,7 @@ import gzip
 user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1468.0 Safari/537.36"
 base_url = "http://akas.imdb.com/title/"
 
-def get_IMDb_page(imdb_id):
+def get_IMDb_page(imdb_id, flock):
 	url = base_url + imdb_id + "/"
 	req = urllib2.Request(url)
 	req.add_header('User-Agent', user_agent)
@@ -32,25 +32,38 @@ def get_IMDb_page(imdb_id):
 		else:
 			html=response.read()
 		response.close()
-		return html
-	except urllib2.URLError as err: 
-		defaultLog( addonLanguage(32505) % ( err ) )
-		return html
+		return (html, "OK", "OK")
+	except urllib2.HTTPError as err:
+                error = str( err.code ) + " " + err.reason
+		defaultLog( addonLanguage(32505) % error )
+		if flock != None:
+                        flock.acquire()
+                        try:
+                                statusLog( "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % error )
+                        finally:
+                                flock.release()
+		return (html, "HTTP", error)
 	except socket.error as err:
 		defaultLog( addonLanguage(32505) % ( err ) )
-		return html
+		return (html, "socket", ( err ))
 
-def parse_IMDb_page(imdb_id):
+def parse_IMDb_page(imdb_id, flock):
 	do_loop = 1
 	while do_loop > 0 :
-		html = get_IMDb_page(imdb_id)
-		if html == "":
+		(html, status, error) = get_IMDb_page(imdb_id,flock)
+		if status == "socket":
 			xbmc.sleep(1000 * do_loop)
 			do_loop += 1
-			if do_loop == 10:
-				return None
-		else:
-			do_loop = 0
+			if do_loop == 4:
+                                if flock != None:
+                                        flock.acquire()
+                                        try:
+                                                statusLog( "get_IMDb_page: " + addonLanguage(32505) % error )
+                                        finally:
+                                                flock.release()
+                                return None
+		elif status == "HTTP": return None
+		else: do_loop = 0
 	htmlline = html.replace('\n', ' ').replace('\r', '')
 	matchVotes = re.findall(r'title=\"(\d\.\d) based on (\d*,?\d*,?\d+) user ratings\"', htmlline)
 	if matchVotes:
@@ -59,6 +72,12 @@ def parse_IMDb_page(imdb_id):
 	else:
 		rating = 0
 		votes = 0
+		if flock != None:
+                        flock.acquire()
+                        try:
+                                statusLog( "parse_IMDb_page: " + imdb_id + " -> no ratings" )
+                        finally:
+                                flock.release()
 	matchTop250 = re.findall(r'href="/chart/top\?ref_=tt_awd" > Top Rated Movies #(\d+) </a>', htmlline)
 	if matchTop250:
 		top250 = matchTop250[0]
