@@ -4,6 +4,8 @@
 # Light IMDb Ratings Update #
 # by axlt2002               #
 #############################
+# changes by dziobak        #
+#############################
 
 import xbmc, xbmcgui
 import sys, re
