@@ -45,10 +45,10 @@ def doNotify( textMessage, millSec ):
      xbmc.executebuiltin( 'Notification( "%s", "%s", %s, "%s")' % ( addonName, textMessage.encode('utf-8'), millSec, addonIcon ) )
 
 def statusLog( textMessage ):
-        f = open(addonProfile + "/status.log", 'a')
-        f.write( doNormalize( textMessage + "\n" ))
-        f.close()
-        
+     f = open( addonProfile + "/update.log", 'a' )
+     f.write( doNormalize( textMessage + "\n" ) )
+     f.close()
+
 def beginStatusLog():
-        f = open(addonProfile + "/status.log", 'w')
-        f.close()
+     f = open( addonProfile + "/update.log", 'w' )
+     f.close()
