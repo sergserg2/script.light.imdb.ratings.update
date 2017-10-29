@@ -78,13 +78,13 @@ def update( filename, label ):
 		if TVDB == "" or TVDB == None:
 			TVDB = unique_id.get('unknown')
 	exit = False
-	Title  = item.get('label')
+	Title = item.get('label')
 	defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
 	if (updateitem != "movie") and (IMDb == "" or IMDb == None or "tt" not in IMDb):
 		(IMDb, statusInfo) = get_IMDb_ID(updateitem, TVDB)
-                if IMDb == None:
-                        defaultLog( addonLanguage(32503) % ( Title ) )
-                        exit = True
+	if IMDb == None:
+		defaultLog( addonLanguage(32503) % ( Title ) )
+		exit = True
 	else:	
 		(updatedRating, updatedVotes, updatedTop250, statusInfo) = parse_IMDb_page(IMDb)
 		if updatedRating == None:
@@ -135,16 +135,16 @@ def doUpdateEpisodes( progress, tvshowid, season, tvshowtitle ):
 				TVDB = ""
 				Counter = Counter + 1
 				progress.update( (Counter*100)/AllEpisodes, addonLanguage(32260), tvshowtitle )
-				EpisodeID = item.get('episodeid'); unique_id = item.get('uniqueid'); IMDb = unique_id.get('imdb'); Title  = item.get('label')
+				EpisodeID = item.get('episodeid'); unique_id = item.get('uniqueid'); IMDb = unique_id.get('imdb'); Title = item.get('label')
 				TVDB = unique_id.get('tvdb')
 				if TVDB == "" or TVDB == None:
 					TVDB = unique_id.get('unknown')
 				defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
 				if IMDb == "" or IMDb == None or "tt" not in IMDb:
 					(IMDb, statusInfo) = get_IMDb_ID("episode", TVDB)
-                                        if IMDb == None:
-                                                defaultLog( addonLanguage(32503) % ( Title ) )
-                                                continue
+				if IMDb == None:
+					defaultLog( addonLanguage(32503) % ( Title ) )
+					continue
 				(updatedRating, updatedVotes, updatedTop250, statusInfo) = parse_IMDb_page(IMDb)
 				if updatedRating == None:
 					defaultLog( addonLanguage(32503) % ( Title ) )
