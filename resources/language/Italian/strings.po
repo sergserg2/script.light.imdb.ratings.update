@@ -85,8 +85,8 @@ msgid ""%s": Update finished (impossible to update)"
 msgstr ""%s": Aggiornamento terminato (impossibile aggiornare)"
 
 msgctxt "#32504"
-msgid ""%s": Update finished (skipped because watched)"
-msgstr ""%s": Aggiornamento terminato (saltato perchè visto)"
+msgid ""%s": Update skipped (because watched)"
+msgstr ""%s": Aggiornamento saltato (perchè visto)"
 
 msgctxt "#32505"
 msgid "Error accessing IMDb site (%s)"
