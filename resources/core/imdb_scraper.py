@@ -34,13 +34,13 @@ def get_IMDb_page(imdb_id):
 		response.close()
 		return (html, "OK", None)
 	except urllib2.HTTPError as err:
-                error = str( err.code ) + " " + err.reason
+		error = str( err.code ) + " " + err.reason
 		defaultLog( addonLanguage(32505) % error )
-                statusInfo = "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % error
+		statusInfo = "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % error
 		return (html, "HTTP", statusInfo)
 	except socket.error as err:
 		defaultLog( addonLanguage(32505) % ( err ) )
-                statusInfo = "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % (err)
+		statusInfo = "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % (err)
 		return (html, "socket", statusInfo)
 
 def parse_IMDb_page(imdb_id):
@@ -61,7 +61,7 @@ def parse_IMDb_page(imdb_id):
 	else:
 		rating = None
 		votes = None
-                statusInfo = "parse_IMDb_page: " + imdb_id + " -> no ratings"
+		statusInfo = "parse_IMDb_page: " + imdb_id + " -> no rating"
 	matchTop250 = re.findall(r'href="/chart/top\?ref_=tt_awd" > Top Rated Movies #(\d+) </a>', htmlline)
 	if matchTop250:
 		top250 = matchTop250[0]
