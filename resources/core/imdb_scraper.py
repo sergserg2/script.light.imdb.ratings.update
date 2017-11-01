@@ -42,6 +42,11 @@ def get_IMDb_page(imdb_id):
 		defaultLog( addonLanguage(32505) % ( err ) )
 		statusInfo = "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % (err)
 		return (html, "socket", statusInfo)
+	except urllib2.URLError as err:
+                #handling as timeout
+		defaultLog( addonLanguage(32505) % ( err ) )
+		statusInfo = "get_IMDb_page: " + url + " -> " + addonLanguage(32505) % (err)
+		return (html, "socket", statusInfo)
 
 def parse_IMDb_page(imdb_id):
 	do_loop = 1
