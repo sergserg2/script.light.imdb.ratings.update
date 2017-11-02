@@ -18,17 +18,17 @@ def get_IMDb_ID(updateitem, tvdb_id):
 	if tvdb_id == "" or tvdb_id == None:
 		return (imdb_id, "missing TVDB ID");
 	if updateitem == "tvshow":
-		show = tvdb.Series(tvdb_id)
-		response = show.info()
 		try:
+			show = tvdb.Series(tvdb_id)
+			response = show.info()
 			imdb_id = show.imdbId
 		except:
 			defaultLog( addonLanguage(32511) )
 			pass
 	elif updateitem == "episode":
-		episode = tvdb.Episode(tvdb_id)
-		response = episode.info()
 		try:
+			episode = tvdb.Episode(tvdb_id)
+			response = episode.info()
 			imdb_id = episode.imdbId
 		except:
 			defaultLog( addonLanguage(32511) )
