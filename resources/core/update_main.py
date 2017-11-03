@@ -34,7 +34,7 @@ def thread_parse_IMDb_page(dType, dbID, IMDb, Title, Rating, Votes, TVDB, lock, 
 	if IMDb == None:
 			if dType == "tvshow" or dType == "episode":
 				(IMDb, statusInfo) = get_IMDb_ID(dType, TVDB)
-			if dType == "movie":
+			elif dType == "movie":
 				statusInfo = "missing IMDb ID"
 			if IMDb == None:
 				defaultLog( addonLanguage(32503) % ( Title ) )
