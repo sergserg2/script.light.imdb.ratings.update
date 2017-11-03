@@ -14,6 +14,7 @@ else: import simplejson as jSon
 from common import *
 from imdb_scraper import parse_IMDb_page
 from tvdb_scraper import get_IMDb_ID
+from tmdb_scraper import get_IMDb_ID_from_TMDb
 from thread import start_new_thread, allocate_lock
 
 max_threads = int(NumberOfThreads) - 1	#0 - 1 thread, 1 - 2 threads ...
@@ -33,7 +34,10 @@ def thread_parse_IMDb_page(dType, dbID, IMDb, Title, Rating, Votes, TVDB, lock, 
 	defaultLog( addonLanguage(32507) % ( Title, IMDb, TVDB ) )
 	if IMDb == None:
 			if dType == "tvshow" or dType == "episode":
-				(IMDb, statusInfo) = get_IMDb_ID(dType, TVDB)
+				if "tmdb" in TVDB:
+					(IMDb, statusInfo) = get_IMDb_ID_from_TMDb(dType, TVDB)
+				else:
+					(IMDb, statusInfo) = get_IMDb_ID(dType, TVDB)
 			if dType == "movie":
 				statusInfo = "missing IMDb ID"
 			if IMDb == None:
@@ -167,7 +171,8 @@ class TVShows:
 				for item in jSonResponse['result']['tvshows']:
 					TVShowID = item.get('tvshowid'); unique_id = item.get('uniqueid'); imdb_id = unique_id.get('imdb'); Title = item.get('label');
 					Rating = item.get('rating'); Votes = item.get('votes'); tvdb_id = item.get('imdbnumber'); Watched = item.get('playcount');
-					self.AllTVShows.append( ( TVShowID, imdb_id, Title, Rating, Votes, tvdb_id, Watched ) )
+					tmdb_id = unique_id.get('tmdb');
+					self.AllTVShows.append( ( TVShowID, imdb_id, Title, Rating, Votes, tvdb_id, Watched, tmdb_id ) )
 		except: pass
 
 	def doUpdateEpisodes( self, tvshowid, tvshowtitle, PCounter ):
@@ -189,6 +194,8 @@ class TVShows:
 					TVDB = unique_id.get('tvdb')
 					if TVDB == "" or TVDB == None:
 						TVDB = unique_id.get('unknown')
+						if TVDB == "" or TVDB == None:
+							TVDB = "tmdb" + unique_id.get('tmdb') + "se" + str( item.get('season') ) + "ep" + str( item.get('episode') )
 					if ShowProgress == "true":
 						self.Progress.update( PCounter, addonLanguage(32262), Title )
 					if int(Watched) > 0 and ExcludeWatched == "true":
@@ -216,6 +223,8 @@ class TVShows:
 			if int(TVShow[6]) > 0 and ExcludeWatched == "true":
 				defaultLog( addonLanguage(32504) % ( TVShow[2] ) )
 				continue
+			if TVShow[5] == "" or TVShow[5] == None:
+				TVShow[5] = "tmdb" + TVShow[7]
 			start_new_thread(thread_parse_IMDb_page,("tvshow",TVShow[0],TVShow[1],TVShow[2],TVShow[3],TVShow[4],TVShow[5],self.lock,self.flock))
 			self.lock.acquire()
 			num_threads += 1
