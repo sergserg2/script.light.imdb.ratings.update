@@ -13,7 +13,7 @@ tvdb.KEYS.API_KEY = "53F49B260156B636"
 
 def get_IMDb_ID(updateitem, tvdb_id):
 	imdb_id = None
-	statusInfo = None
+	statusInfo = "OK"
 	defaultLog( addonLanguage(32509) )
 	if tvdb_id == "" or tvdb_id == None:
 		return (imdb_id, "missing TVDB ID");
