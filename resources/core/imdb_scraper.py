@@ -32,7 +32,7 @@ def get_IMDb_page(imdb_id):
 		else:
 			html=response.read()
 		response.close()
-		return (html, "OK", None)
+		return (html, "OK", "OK")
 	except urllib2.HTTPError as err:
 		error = str( err.code ) + " " + err.reason
 		defaultLog( addonLanguage(32505) % error )
